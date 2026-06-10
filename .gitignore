@@ -32,6 +32,9 @@ playwright/.cache/
 supabase/.branches/
 supabase/.temp/
 
+# conductor — personal per-repo overrides stay local (shared config IS committed)
+.conductor/settings.local.toml
+
 # misc / os / editor
 .DS_Store
 *.log
