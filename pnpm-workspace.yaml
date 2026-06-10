@@ -3,8 +3,6 @@ packages:
 allowBuilds:
   sharp: true
   unrs-resolver: true
-# Approve native build scripts for these trusted deps
-# (sharp = Next.js image optimization; unrs-resolver = native module resolver).
 onlyBuiltDependencies:
   - sharp
   - unrs-resolver
