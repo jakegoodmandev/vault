@@ -1,0 +1,45 @@
+# dependencies
+node_modules/
+.pnpm-store/
+
+# env / secrets — NEVER commit these
+.env
+.env.*
+!.env.example
+SECRETS.md
+*.secrets.md
+.secrets/
+
+# next.js
+.next/
+out/
+build/
+.vercel/
+next-env.d.ts
+
+# python
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+
+# playwright
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+
+# supabase local stack
+supabase/.branches/
+supabase/.temp/
+
+# conductor — personal per-repo overrides stay local (shared config IS committed)
+.conductor/settings.local.toml
+
+# misc / os / editor
+.DS_Store
+*.log
+.idea/
+.vscode/

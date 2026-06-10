@@ -1,0 +1,16 @@
+{
+  "name": "vault",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Learning scaffold for an AI-agents-for-healthcare web app (Ontario). See docs/VISION.md.",
+  "engines": {
+    "node": ">=20"
+  },
+  "packageManager": "pnpm@11.1.2",
+  "scripts": {
+    "dev:web": "pnpm --filter web dev",
+    "build:web": "pnpm --filter web build",
+    "lint": "pnpm --filter web lint",
+    "test:e2e": "pnpm --filter web test:e2e"
+  }
+}

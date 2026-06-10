@@ -1,0 +1,12 @@
+packages:
+  - "apps/*"
+allowBuilds:
+  sharp: true
+  unrs-resolver: true
+# Approve native build scripts for these trusted deps
+# (sharp = Next.js image optimization; unrs-resolver = native module resolver).
+onlyBuiltDependencies:
+  - sharp
+  - unrs-resolver
+
+# services/agents is a Python (uv) project, not a pnpm workspace member.
