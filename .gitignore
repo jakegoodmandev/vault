@@ -6,6 +6,9 @@ node_modules/
 .env
 .env.*
 !.env.example
+SECRETS.md
+*.secrets.md
+.secrets/
 
 # next.js
 .next/
