@@ -1,24 +1,8 @@
 "$schema" = "https://conductor.build/schemas/settings.repo.schema.json"
 
-# Copy gitignored env files into every NEW workspace so a fresh workspace can run
-# without re-entering secrets. These files are gitignored and never committed;
-# Conductor copies them from the repo root's working tree into each worktree.
-file_include_globs = ".env*\napps/web/.env*\nservices/agents/.env*\n"
-
 [scripts]
-# Runs once when Conductor creates a workspace.
 setup = "pnpm install"
+run = "pnpm dev --port $CONDUCTOR_PORT"
 
-# The Run button. Next.js honors the PORT env var; Conductor assigns each
-# workspace a CONDUCTOR_PORT (plus CONDUCTOR_PORT+1..+9 for companion services,
-# e.g. the Python agent service we'll add under services/agents).
-#
-# TODO (after the agent exists): run web + agent together in one process group:
-#   run = "concurrently \"PORT=$CONDUCTOR_PORT AGENT_SERVICE_URL=http://localhost:$((CONDUCTOR_PORT+1)) pnpm dev:web\" \"cd services/agents && uv run uvicorn app.main:app --port $((CONDUCTOR_PORT+1))\""
-run = "PORT=$CONDUCTOR_PORT pnpm dev:web"
-
-# Each workspace gets its own 10-port range, so multiple workspaces can run at
-# once without colliding. Caveat: if you switch to a single local `supabase start`
-# stack (fixed ports 54321+), run one workspace at a time and set this to
-# "nonconcurrent".
-run_mode = "concurrent"
+# Using "nonconcurrent" because the run script depends on the single local supabase port (54322)
+run_mode = "nonconcurrent"
