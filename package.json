@@ -8,6 +8,7 @@
   },
   "packageManager": "pnpm@11.1.2",
   "scripts": {
+    "dev:supabase": "supabase start",
     "dev:web": "pnpm --filter web dev",
     "build:web": "pnpm --filter web build",
     "lint": "pnpm --filter web lint",

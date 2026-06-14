@@ -4,5 +4,5 @@
 setup = "pnpm install"
 run = "pnpm run dev:web --port $CONDUCTOR_PORT"
 
-# Using "nonconcurrent" because the run script depends on the single local supabase port (54322)
-run_mode = "nonconcurrent"
+# web can use per-workspace ports; Supabase is shared
+run_mode = "concurrent"
