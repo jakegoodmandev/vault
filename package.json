@@ -4,7 +4,7 @@
   "private": true,
   "description": "Learning scaffold for an AI-agents-for-healthcare web app (Ontario). See docs/VISION.md.",
   "engines": {
-    "node": ">=20"
+    "node": ">=26"
   },
   "packageManager": "pnpm@11.1.2",
   "scripts": {
