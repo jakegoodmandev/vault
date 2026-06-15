@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test:e2e": "playwright test"
+    "test:install": "playwright install --with-deps",
+    "test:run": "playwright test"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.0",

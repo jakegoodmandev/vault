@@ -12,6 +12,7 @@
     "dev:web": "pnpm --filter web dev",
     "build:web": "pnpm --filter web build",
     "lint": "pnpm --filter web lint",
-    "test:e2e": "pnpm --filter web test:e2e"
+    "test:install": "pnpm --filter web test:install",
+    "test:run": "pnpm --filter web test:run"
   }
 }
