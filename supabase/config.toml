@@ -61,14 +61,14 @@ max_client_conn = 100
 enabled = true
 # Specifies an ordered list of schema files that describe your database.
 # Supports glob patterns relative to supabase directory: "./schemas/*.sql"
-schema_paths = []
+schema_paths = ["./schemas/001_patients.sql", "./schemas/002_payers.sql", "./schemas/003_providers.sql", "./schemas/004_facilities.sql", "./schemas/005_diagnoses.sql", "./schemas/006_procedures.sql", "./schemas/007_patient_policies.sql", "./schemas/008_claims.sql", "./schemas/009_claim_diagnoses.sql", "./schemas/010_claim_line_items.sql", "./schemas/011_claim_status_history.sql", "./schemas/012_payments.sql", "./schemas/013_payment_allocations.sql"]
 
 [db.seed]
 # If enabled, seeds the database after migrations during a db reset.
 enabled = true
 # Specifies an ordered list of seed files to load during db reset.
 # Supports glob patterns relative to supabase directory: "./seeds/*.sql"
-sql_paths = ["./seed.sql"]
+sql_paths = ["./seeds/001_patients.sql", "./seeds/002_payers.sql", "./seeds/003_providers.sql", "./seeds/004_facilities.sql", "./seeds/005_diagnoses.sql", "./seeds/006_procedures.sql", "./seeds/007_patient_policies.sql", "./seeds/008_claims.sql", "./seeds/009_claim_diagnoses.sql", "./seeds/010_claim_line_items.sql", "./seeds/011_claim_status_history.sql", "./seeds/012_payments.sql", "./seeds/013_payment_allocations.sql"]
 
 [db.network_restrictions]
 # Enable management of network restrictions.
