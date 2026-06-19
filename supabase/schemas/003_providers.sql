@@ -3,6 +3,9 @@ create table providers (
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
 
+  practice_id uuid not null references practices(id) on delete restrict,
+  default_facility_id uuid references facilities(id) on delete set null,
+
   registration_number text unique not null,
   first_name text not null,
   last_name text not null,
@@ -19,5 +22,7 @@ create table providers (
 
   is_active boolean not null default true
 );
+
+create index idx_providers_practice on providers(practice_id);
 
 alter table providers enable row level security;

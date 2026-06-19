@@ -49,3 +49,13 @@ create index idx_claims_service_date on claims(service_date_from, service_date_t
 create index idx_claims_provider on claims(primary_provider_id);
 
 alter table claims enable row level security;
+
+create policy "Staff can manage claims at their facility"
+  on claims for all
+  using (
+    facility_id in (
+      select f.id from facilities f
+      join staff s on s.practice_id = f.practice_id
+      where s.auth_user_id = auth.uid() and s.is_active = true
+    )
+  );

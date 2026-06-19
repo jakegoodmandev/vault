@@ -10,3 +10,15 @@ create table payment_allocations (
 );
 
 alter table payment_allocations enable row level security;
+
+create policy "Staff can manage payment allocations at their facility"
+  on payment_allocations for all
+  using (
+    payment_id in (
+      select id from payments
+      where practice_id in (
+        select practice_id from staff
+        where auth_user_id = auth.uid() and is_active = true
+      )
+    )
+  );

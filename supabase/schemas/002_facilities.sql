@@ -3,6 +3,8 @@ create table facilities (
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
 
+  practice_id uuid not null references practices(id) on delete restrict,
+
   name text not null,
   registration_number text unique,
   taxonomy_code text,
@@ -17,5 +19,7 @@ create table facilities (
   place_of_service_code text default '11',
   is_active boolean not null default true
 );
+
+create index idx_facilities_practice on facilities(practice_id);
 
 alter table facilities enable row level security;

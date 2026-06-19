@@ -30,3 +30,15 @@ create index idx_patient_policies_patient on patient_policies(patient_id);
 create index idx_patient_policies_payer on patient_policies(payer_id);
 
 alter table patient_policies enable row level security;
+
+create policy "Staff can manage patient policies at their practice"
+  on patient_policies for all
+  using (
+    patient_id in (
+      select id from patients
+      where practice_id in (
+        select practice_id from staff
+        where auth_user_id = auth.uid() and is_active = true
+      )
+    )
+  );

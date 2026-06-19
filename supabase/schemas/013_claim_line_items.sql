@@ -34,3 +34,14 @@ create table claim_line_items (
 create index idx_claim_line_items_claim on claim_line_items(claim_id);
 
 alter table claim_line_items enable row level security;
+
+create policy "Staff can manage line items at their facility"
+  on claim_line_items for all
+  using (
+    claim_id in (
+      select c.id from claims c
+      join facilities f on f.id = c.facility_id
+      join staff s on s.practice_id = f.practice_id
+      where s.auth_user_id = auth.uid() and s.is_active = true
+    )
+  );

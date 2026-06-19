@@ -8,3 +8,7 @@ create table procedures (
 );
 
 alter table procedures enable row level security;
+
+create policy "Staff can read procedures"
+  on procedures for select
+  using (exists (select 1 from staff where auth_user_id = auth.uid() and is_active = true));
