@@ -61,7 +61,7 @@ max_client_conn = 100
 enabled = true
 # Specifies an ordered list of schema files that describe your database.
 # Supports glob patterns relative to supabase directory: "./schemas/*.sql"
-schema_paths = ["./schemas/001_practices.sql", "./schemas/002_facilities.sql", "./schemas/003_providers.sql", "./schemas/004_staff.sql", "./schemas/005_rls_core.sql", "./schemas/006_patients.sql", "./schemas/007_payers.sql", "./schemas/008_diagnoses.sql", "./schemas/009_procedures.sql", "./schemas/010_patient_policies.sql", "./schemas/011_claims.sql", "./schemas/012_claim_diagnoses.sql", "./schemas/013_claim_line_items.sql", "./schemas/014_claim_status_history.sql", "./schemas/015_payments.sql", "./schemas/016_payment_allocations.sql", "./schemas/017_practice_diagnoses.sql", "./schemas/018_practice_procedure_pricing.sql"]
+schema_paths = ["./schemas/001_practices.sql", "./schemas/002_facilities.sql", "./schemas/003_providers.sql", "./schemas/004_staff.sql", "./schemas/005_rls_core.sql", "./schemas/006_patients.sql", "./schemas/007_payers.sql", "./schemas/008_diagnoses.sql", "./schemas/009_procedures.sql", "./schemas/010_patient_policies.sql", "./schemas/011_claims.sql", "./schemas/012_claim_diagnoses.sql", "./schemas/013_claim_line_items.sql", "./schemas/014_claim_status_history.sql", "./schemas/015_payments.sql", "./schemas/016_payment_allocations.sql", "./schemas/017_practice_diagnoses.sql", "./schemas/018_practice_procedure_pricing.sql", "./schemas/019_staff_jwt_claims.sql"]
 
 [db.seed]
 # If enabled, seeds the database after migrations during a db reset.

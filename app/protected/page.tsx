@@ -1,43 +1,79 @@
-import { redirect } from "next/navigation";
-
-import { createClient } from "@/lib/supabase/server";
-import { InfoIcon } from "lucide-react";
-import { FetchDataSteps } from "@/components/tutorial/fetch-data-steps";
 import { Suspense } from "react";
+import { createClient } from "@/lib/supabase/server";
+import { getCurrentStaff } from "@/lib/auth";
+import { Building2, Stethoscope, CreditCard, Users, FileText } from "lucide-react";
 
-async function UserDetails() {
+async function DashboardStats() {
+  const { practiceId } = await getCurrentStaff();
   const supabase = await createClient();
-  const { data, error } = await supabase.auth.getClaims();
 
-  if (error || !data?.claims) {
-    redirect("/auth/login");
-  }
+  const { data: practice } = await supabase
+    .from("practices")
+    .select("name")
+    .eq("id", practiceId)
+    .single();
 
-  return JSON.stringify(data.claims, null, 2);
-}
+  const { data: staff } = await supabase
+    .from("staff")
+    .select("role")
+    .eq("practice_id", practiceId)
+    .limit(1)
+    .single();
 
-export default function ProtectedPage() {
+  const [{ count: facilityCount }, { count: providerCount }, { count: payerCount }, { count: patientCount }] = await Promise.all([
+    supabase.from("facilities").select("*", { count: "exact", head: true }).eq("practice_id", practiceId),
+    supabase.from("providers").select("*", { count: "exact", head: true }).eq("practice_id", practiceId),
+    supabase.from("payers").select("*", { count: "exact", head: true }).eq("practice_id", practiceId),
+    supabase.from("patients").select("*", { count: "exact", head: true }).eq("practice_id", practiceId),
+  ]);
+
+  const { data: facilityIds } = await supabase
+    .from("facilities")
+    .select("id")
+    .eq("practice_id", practiceId);
+
+  const { count: claimCount } = await supabase
+    .from("claims")
+    .select("*", { count: "exact", head: true })
+    .in("facility_id", facilityIds?.map((f) => f.id) ?? []);
+
+  const cards = [
+    { label: "Facilities", value: facilityCount ?? 0, icon: Building2, href: "/protected/facilities" },
+    { label: "Providers", value: providerCount ?? 0, icon: Stethoscope, href: "/protected/providers" },
+    { label: "Payers", value: payerCount ?? 0, icon: CreditCard, href: "/protected/payers" },
+    { label: "Patients", value: patientCount ?? 0, icon: Users, href: "/protected/patients" },
+    { label: "Claims", value: claimCount ?? 0, icon: FileText, href: "/protected/claims" },
+  ];
+
   return (
-    <div className="flex-1 w-full flex flex-col gap-12">
-      <div className="w-full">
-        <div className="bg-accent text-sm p-3 px-5 rounded-md text-foreground flex gap-3 items-center">
-          <InfoIcon size="16" strokeWidth={2} />
-          This is a protected page that you can only see as an authenticated
-          user
-        </div>
-      </div>
-      <div className="flex flex-col gap-2 items-start">
-        <h2 className="font-bold text-2xl mb-4">Your user details</h2>
-        <pre className="text-xs font-mono p-3 rounded border max-h-32 overflow-auto">
-          <Suspense>
-            <UserDetails />
-          </Suspense>
-        </pre>
-      </div>
+    <div className="space-y-6">
       <div>
-        <h2 className="font-bold text-2xl mb-4">Next steps</h2>
-        <FetchDataSteps />
+        <h1 className="text-2xl font-bold">{practice?.name ?? "My Practice"}</h1>
+        <p className="text-muted-foreground text-sm">Role: {staff?.role ?? "-"}</p>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+        {cards.map((card) => (
+          <a
+            key={card.label}
+            href={card.href}
+            className="flex flex-col gap-2 rounded-lg border p-4 hover:bg-accent transition-colors"
+          >
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <card.icon className="h-4 w-4" />
+              <span className="text-sm font-medium">{card.label}</span>
+            </div>
+            <span className="text-3xl font-bold">{card.value}</span>
+          </a>
+        ))}
       </div>
     </div>
+  );
+}
+
+export default function DashboardPage() {
+  return (
+    <Suspense fallback={<div className="text-muted-foreground p-4">Loading dashboard...</div>}>
+      <DashboardStats />
+    </Suspense>
   );
 }
