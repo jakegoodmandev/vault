@@ -6,15 +6,31 @@ import { createClient } from '@/lib/supabase/server'
 export default async function ProtectedPage() {
   const supabase = await createClient()
 
-  const { data, error } = await supabase.auth.getClaims()
-  if (error || !data?.claims) {
+  const { data: { user }, error: getUserError } = await supabase.auth.getUser();    
+  if (getUserError) {
+    throw new Error(getUserError.message)
+  }
+  if (!user) {
     redirect('/auth/login')
   }
+
+  const { data, error: getStaffError } = await supabase
+    .from('staff')
+    .select()
+
+  if (getStaffError) {
+    throw new Error(getStaffError.message)
+  }
+  if (!data) {
+    throw new Error('No staff found')
+  }
+
+  console.log('staff', data)
 
   return (
     <div className="flex h-svh w-full items-center justify-center gap-2">
       <p>
-        Hello <span>{data.claims.email}</span>
+        Hello <span>{user.email}</span>
       </p>
       <LogoutButton />
     </div>
