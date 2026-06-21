@@ -5,9 +5,6 @@ create table "staff" (
   "created_at"      timestamptz not null default now()
 );
 
-GRANT SELECT, INSERT, UPDATE, DELETE ON public.staff TO authenticated;
-GRANT SELECT, INSERT, UPDATE, DELETE ON public.staff TO service_role;
-
 alter table public.staff enable row level security;
 
 create policy "Staff can see their own profile only."
@@ -15,6 +12,9 @@ on staff
 for select 
 to authenticated
 using (auth.uid() is not null and auth.uid() = auth_user_id);
+
+grant select on public.staff to authenticated;
+grant select, insert, update, delete ON public.staff to service_role;
 
 create or replace function public.handle_new_user()
 returns trigger

@@ -21,6 +21,6 @@ ALTER TABLE public.staff ADD CONSTRAINT staff_auth_user_id_fkey FOREIGN KEY (aut
 ALTER TABLE public.staff ADD CONSTRAINT staff_email_key UNIQUE (email);
 ALTER TABLE public.staff ADD CONSTRAINT staff_pkey PRIMARY KEY (id);
 GRANT MAINTAIN, REFERENCES, TRIGGER, TRUNCATE ON public.staff TO anon;
-GRANT ALL ON public.staff TO authenticated;
+GRANT MAINTAIN, REFERENCES, SELECT, TRIGGER, TRUNCATE ON public.staff TO authenticated;
 GRANT ALL ON public.staff TO service_role;
 CREATE POLICY "Staff can see their own profile only." ON public.staff FOR SELECT TO authenticated USING (((auth.uid() IS NOT NULL) AND (auth.uid() = auth_user_id)));

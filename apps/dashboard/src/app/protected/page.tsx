@@ -8,6 +8,7 @@ export default async function ProtectedPage() {
 
   const { data: { user }, error: getUserError } = await supabase.auth.getUser();    
   if (getUserError) {
+    console.error("Error getting user:", getUserError)
     throw new Error(getUserError.message)
   }
   if (!user) {
@@ -24,8 +25,6 @@ export default async function ProtectedPage() {
   if (!data) {
     throw new Error('No staff found')
   }
-
-  console.log('staff', data)
 
   return (
     <div className="flex h-svh w-full items-center justify-center gap-2">
