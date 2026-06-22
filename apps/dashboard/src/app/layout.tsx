@@ -1,13 +1,22 @@
-import type { Metadata } from "next";
-import { GeistSans } from 'geist/font/sans';
 import { GeistMono } from 'geist/font/mono';
-import { GeistPixelSquare, GeistPixelGrid, GeistPixelCircle, GeistPixelTriangle, GeistPixelLine } from 'geist/font/pixel';
+import {
+  GeistPixelCircle,
+  GeistPixelGrid,
+  GeistPixelLine,
+  GeistPixelSquare,
+  GeistPixelTriangle,
+} from 'geist/font/pixel';
+import { GeistSans } from 'geist/font/sans';
+import type { Metadata } from 'next';
 
-import "./globals.css";
+import { ThemeProvider } from '@/components/theme-provider';
+import { SidebarProvider } from '@/components/ui/sidebar';
+import { TooltipProvider } from '@/components/ui/tooltip';
+import './globals.css';
 
 export const metadata: Metadata = {
-  title: "Dashboard",
-  description: "Dashboard for healthcare.",
+  title: 'Dashboard',
+  description: 'Dashboard for healthcare.',
 };
 
 export default function RootLayout({
@@ -18,17 +27,31 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning // This is recommended for using next-themes
       className={`
-        ${GeistSans.variable}
+         ${GeistSans.variable}
         ${GeistMono.variable}
         ${GeistPixelSquare.variable}
         ${GeistPixelGrid.variable}
         ${GeistPixelCircle.variable}
         ${GeistPixelTriangle.variable}
         ${GeistPixelLine.variable}
-        h-full antialiased`}
+        antialiased
+      `}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <TooltipProvider>
+            {/* <AppSidebar /> */}
+            {children}
+          </TooltipProvider>
+        </ThemeProvider>
+      </body>
     </html>
   );
 }

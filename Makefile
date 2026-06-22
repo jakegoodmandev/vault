@@ -16,3 +16,6 @@ tests_run:
 tests_run_ui:
 	# The UI stalled when ran with the --bun flag, so we have to run it without that flag.
 	cd apps/dashboard && bun run test:e2e:ui
+
+format:
+	cd apps/dashboard && bun --bun run format

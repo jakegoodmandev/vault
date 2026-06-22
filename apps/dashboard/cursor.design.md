@@ -343,6 +343,7 @@ Type runs **CursorGothic** as the single sans family. Display sits at weight 400
 The brand's strongest visual signature is the **AI-timeline pill palette**: five pastel pills (peach `{colors.timeline-thinking}`, mint `{colors.timeline-grep}`, blue `{colors.timeline-read}`, lavender `{colors.timeline-edit}`, gold `{colors.timeline-done}`) marking AI-action stages inside in-product timeline visualizations. Used only in product UI — never as system action colors.
 
 **Key Characteristics:**
+
 - Warm cream canvas, not white. Ink is warm (#26251e), not pure black.
 - Single CTA color: `{colors.primary}` (Cursor Orange #f54e00). Used scarcely.
 - Display weight stays at 400 — never bold. Magazine voice.

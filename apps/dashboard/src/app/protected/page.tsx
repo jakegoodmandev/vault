@@ -1,29 +1,30 @@
-import { redirect } from 'next/navigation'
+import { redirect } from 'next/navigation';
 
-import { LogoutButton } from '@/components/auth/logout-button'
-import { createClient } from '@/lib/supabase/server'
+import { LogoutButton } from '@/components/auth/logout-button';
+import { createClient } from '@/lib/supabase/server';
 
 export default async function ProtectedPage() {
-  const supabase = await createClient()
+  const supabase = await createClient();
 
-  const { data: { user }, error: getUserError } = await supabase.auth.getUser();    
+  const {
+    data: { user },
+    error: getUserError,
+  } = await supabase.auth.getUser();
   if (getUserError) {
-    console.error("Error getting user:", getUserError)
-    throw new Error(getUserError.message)
+    console.error('Error getting user:', getUserError);
+    throw new Error(getUserError.message);
   }
   if (!user) {
-    redirect('/auth/login')
+    redirect('/auth/login');
   }
 
-  const { data, error: getStaffError } = await supabase
-    .from('staff')
-    .select()
+  const { data, error: getStaffError } = await supabase.from('staff').select();
 
   if (getStaffError) {
-    throw new Error(getStaffError.message)
+    throw new Error(getStaffError.message);
   }
   if (!data) {
-    throw new Error('No staff found')
+    throw new Error('No staff found');
   }
 
   return (
@@ -33,5 +34,5 @@ export default async function ProtectedPage() {
       </p>
       <LogoutButton />
     </div>
-  )
+  );
 }
