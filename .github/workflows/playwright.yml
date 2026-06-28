@@ -1,27 +1,48 @@
 name: Playwright Tests
 on:
   push:
-    branches: [ main, master ]
+    branches: [main]
   pull_request:
-    branches: [ main, master ]
+    branches: [main]
 jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v6
-    - uses: actions/setup-node@v6
-      with:
-        node-version: '26'
-    - name: Install dependencies
-      run: npm install -g pnpm && pnpm install
-    - name: Install Playwright Browsers
-      run: pnpm run test:install
-    - name: Run Playwright tests
-      run: pnpm run test:run
-    - uses: actions/upload-artifact@v6
-      if: ${{ !cancelled() }}
-      with:
-        name: playwright-report
-        path: playwright-report/
-        retention-days: 30
+      - uses: actions/checkout@v6
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.14
+      - uses: supabase/setup-cli@v2
+        with:
+          version: latest
+
+      - name: Install dependencies
+        run: cd apps/dashboard && bun install
+
+      - name: Start Supabase
+        run: supabase start
+
+      - name: Set Environment Variables
+        run: |
+          PUBLISHABLE_KEY=$(supabase status -o env | grep PUBLISHABLE_KEY | sed 's/^[^=]*=//')
+          cat > apps/dashboard/.env.local << EOF
+          NEXT_PUBLIC_SUPABASE_URL=http://127.0.0.1:54321
+          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=$PUBLISHABLE_KEY
+          EOF
+          cat > apps/dashboard/playwright/.env.local << EOF
+          TEST_DB_URL=postgresql://postgres:postgres@127.0.0.1:54322/postgres
+          EOF
+
+      - name: Install Playwright Browsers
+        run: cd apps/dashboard && bunx playwright install --with-deps
+
+      - name: Run Playwright tests
+        run: cd apps/dashboard && bunx playwright test
+
+      - uses: actions/upload-artifact@v7
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: apps/dashboard/playwright-report/
+          retention-days: 30
