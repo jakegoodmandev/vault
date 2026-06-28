@@ -14,11 +14,11 @@ jobs:
         with:
           node-version: lts/*
       - name: Install dependencies
-        run: cd apps/dashboard && bun install
+        run: cd apps/dashboard && npm cli
       - name: Install Playwright Browsers
-        run: cd apps/dashboard && bunx playwright install --with-deps
+        run: cd apps/dashboard && npx playwright install --with-deps
       - name: Run Playwright tests
-        run: cd apps/dashboard && bunx playwright test
+        run: cd apps/dashboard && npx playwright test
       - uses: actions/upload-artifact@v7
         if: ${{ !cancelled() }}
         with:
