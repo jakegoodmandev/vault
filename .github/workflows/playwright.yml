@@ -13,12 +13,28 @@ jobs:
       - uses: oven-sh/setup-bun@v2
         with:
           bun-version: 1.3.14
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
       - name: Install dependencies
         run: cd apps/dashboard && bun install
+
+      - name: Start Supabase
+        run: |
+          supabase start
+          {
+            echo "NEXT_PUBLIC_SUPABASE_URL=http://127.0.0.1:54321"
+            echo "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=$(supabase status -o env | grep SUPABASE_ANON_KEY | sed 's/^[^=]*=//')"
+            echo "TEST_DB_URL=postgresql://postgres:postgres@127.0.0.1:54322/postgres"
+          } >> "$GITHUB_ENV"
+
       - name: Install Playwright Browsers
         run: cd apps/dashboard && bunx playwright install --with-deps
+
       - name: Run Playwright tests
         run: cd apps/dashboard && bunx playwright test
+
       - uses: actions/upload-artifact@v7
         if: ${{ !cancelled() }}
         with:
