@@ -15,7 +15,7 @@ export default async function DashboardLayout({
 
   return (
     <SidebarProvider>
-      <AppSidebar user={user} />
+      <AppSidebar variant="inset" user={user} />
       <SidebarInset>
         <AppNav user={user} />
         {children}
