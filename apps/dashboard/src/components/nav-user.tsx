@@ -25,9 +25,6 @@ import {
   BellIcon,
   LogOutIcon,
 } from 'lucide-react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-
 export function NavUser({
   user,
 }: {
@@ -37,12 +34,10 @@ export function NavUser({
     avatar: string;
   };
 }) {
-  const router = useRouter();
-
   const logout = async () => {
     const supabase = createClient();
     await supabase.auth.signOut();
-    router.push('/auth/login');
+    window.location.href = '/auth/login';
   };
 
   const { isMobile } = useSidebar();
@@ -108,11 +103,9 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-              <Link onClick={logout} href="/auth/login" className="w-full">
-                <LogOutIcon />
-                Sign out
-              </Link>
+            <DropdownMenuItem onClick={logout}>
+              <LogOutIcon />
+              Sign out
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
