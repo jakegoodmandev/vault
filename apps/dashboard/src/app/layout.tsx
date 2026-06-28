@@ -28,7 +28,7 @@ export default function RootLayout({
       lang="en"
       suppressHydrationWarning // This is recommended for using next-themes
       className={`
-         ${GeistSans.variable}
+        ${GeistSans.variable}
         ${GeistMono.variable}
         ${GeistPixelSquare.variable}
         ${GeistPixelGrid.variable}

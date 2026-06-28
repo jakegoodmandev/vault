@@ -18,6 +18,7 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar';
 import { ChevronsUpDownIcon, PlusIcon } from 'lucide-react';
+import { useStaff } from '@/components/staff-provider';
 
 export function TeamSwitcher({
   teams,
@@ -29,11 +30,15 @@ export function TeamSwitcher({
   }[];
 }) {
   const { isMobile } = useSidebar();
+  const { id: staffId, email: staffEmail } = useStaff();
   const [activeTeam, setActiveTeam] = React.useState(teams[0]);
 
   if (!activeTeam) {
     return null;
   }
+
+  console.log('hello from team switcher');
+  console.log(staffId, staffEmail);
 
   return (
     <SidebarMenu>
@@ -60,7 +65,10 @@ export function TeamSwitcher({
             side={isMobile ? 'bottom' : 'right'}
             sideOffset={4}
           >
-            <DropdownMenuLabel className="text-xs text-muted-foreground">Teams</DropdownMenuLabel>
+            <DropdownMenuLabel className="text-xs text-muted-foreground">
+              {staffEmail}
+            </DropdownMenuLabel>
+
             {teams.map((team, index) => (
               <DropdownMenuItem
                 key={team.name}
