@@ -36,18 +36,20 @@ export async function updateSession(request: NextRequest) {
   // IMPORTANT: If you remove getClaims() and you use server-side rendering
   // with the Supabase client, your users may be randomly logged out.
   const { data, error } = await supabase.auth.getClaims();
-  const user = data?.claims;
+  if (error) {
+    throw new Error('Error getting auth claims');
+  }
 
-  console.log('User in middleware:', user);
-  console.log('Error in middleware:', error);
-  if (!user && !request.nextUrl.pathname.startsWith('/auth')) {
+  const user = data?.claims;
+  const isAuthPage = request.nextUrl.pathname.startsWith('/auth');
+  if (!user && !isAuthPage) {
     // no user, respond by redirecting the user to the login page
     const url = request.nextUrl.clone();
     url.pathname = '/auth/login';
     return NextResponse.redirect(url);
   }
 
-  if (user && request.nextUrl.pathname.startsWith('/auth')) {
+  if (user && isAuthPage) {
     // user is logged in, redirect to dashboard if they try to access auth pages
     const url = request.nextUrl.clone();
     url.pathname = '/dashboard';
@@ -67,9 +69,5 @@ export async function updateSession(request: NextRequest) {
   // If this is not done, you may be causing the browser and server to go out
   // of sync and terminate the user's session prematurely!
 
-  console.log(
-    'supabaseResponse cookies in middleware',
-    supabaseResponse.cookies.getAll()
-  );
   return supabaseResponse;
 }
