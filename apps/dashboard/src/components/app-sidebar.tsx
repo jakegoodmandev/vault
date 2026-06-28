@@ -165,7 +165,7 @@ export function AppSidebar({
     ? {
         name: user.user_metadata.full_name || user.email || 'Unknown User',
         email: user.email || 'No email',
-        avatar: user.user_metadata.avatar_url || '/avatars/default.jpg',
+        avatar: user.user_metadata.avatar_url,
       }
     : data.user;
 

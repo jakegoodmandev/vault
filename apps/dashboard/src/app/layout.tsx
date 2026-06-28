@@ -8,10 +8,9 @@ import {
 } from 'geist/font/pixel';
 import { GeistSans } from 'geist/font/sans';
 import type { Metadata } from 'next';
-
-import { ThemeProvider } from '@/components/theme-provider';
-import { SidebarProvider } from '@/components/ui/sidebar';
 import { TooltipProvider } from '@/components/ui/tooltip';
+import { ThemeProvider } from '@/components/theme-provider';
+
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -46,10 +45,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <TooltipProvider>
-            {/* <AppSidebar /> */}
-            {children}
-          </TooltipProvider>
+          <TooltipProvider>{children}</TooltipProvider>
         </ThemeProvider>
       </body>
     </html>

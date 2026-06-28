@@ -26,6 +26,7 @@ import {
   LogOutIcon,
 } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export function NavUser({
   user,
@@ -36,9 +37,12 @@ export function NavUser({
     avatar: string;
   };
 }) {
+  const router = useRouter();
+
   const logout = async () => {
     const supabase = createClient();
     await supabase.auth.signOut();
+    router.push('/auth/login');
   };
 
   const { isMobile } = useSidebar();
