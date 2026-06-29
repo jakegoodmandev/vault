@@ -44,8 +44,8 @@ test.describe('authenticated user', () => {
   test('can sign out', async ({ page }) => {
     await page.goto('/dashboard');
 
-    page.locator('[data-slot="sidebar-footer"]').click();
-    page.getByText('Sign out').click();
+    page.locator('[data-slot="sidebar-header"]').click();
+    page.getByText('Log out').click();
 
     await expect(page).toHaveURL('/auth/login');
   });

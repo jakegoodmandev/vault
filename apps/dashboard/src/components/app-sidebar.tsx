@@ -4,15 +4,31 @@ import * as React from 'react';
 
 import { NavMain } from '@/components/nav-main';
 import { NavProjects } from '@/components/nav-projects';
-import { NavUser } from '@/components/nav-user';
-import { TeamSwitcher } from '@/components/team-switcher';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuPortal,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
   SidebarRail,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
 } from '@/components/ui/sidebar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   GalleryVerticalEndIcon,
   AudioLinesIcon,
@@ -24,8 +40,11 @@ import {
   FrameIcon,
   PieChartIcon,
   MapIcon,
+  ChevronDownIcon,
 } from 'lucide-react';
 import { User } from '@supabase/supabase-js';
+import { createClient } from '@/lib/supabase/client';
+import { useStaff } from '@/components/staff-provider';
 
 // This is sample data.
 const data = {
@@ -157,31 +176,83 @@ const data = {
   ],
 };
 
-export function AppSidebar({
-  user,
-  ...props
-}: { user: User | null } & React.ComponentProps<typeof Sidebar>) {
-  const userProps = user
-    ? {
-        name: user.user_metadata.full_name || user.email || 'Unknown User',
-        email: user.email || 'No email',
-        avatar: user.user_metadata.avatar_url,
-      }
-    : data.user;
-
+export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <TeamSwitcher teams={data.teams} />
+        <AppSidebarHeaderMenu />
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
+        {/* <NavMain items={data.navMain} />
+        <NavProjects projects={data.projects} /> */}
       </SidebarContent>
-      <SidebarFooter>
-        <NavUser user={userProps} />
-      </SidebarFooter>
       <SidebarRail />
     </Sidebar>
+  );
+}
+
+export function AppSidebarHeaderMenu() {
+  const logout = async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    window.location.href = '/auth/login';
+  };
+
+  const { id: staffId, email: staffEmail } = useStaff();
+  const workspace = 'Workspace';
+
+  return (
+    <SidebarMenu>
+      <SidebarMenuItem>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <SidebarMenuButton
+              size="lg"
+              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+            >
+              <Avatar>
+                <AvatarImage src={'test'} alt={'test'} />
+                <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+              </Avatar>
+              <span className="truncate text-base font-semibold">{workspace}</span>
+              <ChevronDownIcon className="ml-auto" />
+            </SidebarMenuButton>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent
+            className="w-fit"
+            align="start"
+            side="bottom"
+            sideOffset={4}
+          >
+            <DropdownMenuItem>Settings</DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger>Switch workspace</DropdownMenuSubTrigger>
+              <DropdownMenuPortal>
+                <DropdownMenuSubContent>
+                  <DropdownMenuGroup>
+                    <DropdownMenuLabel>{staffEmail}</DropdownMenuLabel>
+                    <DropdownMenuItem>
+                      <Avatar>
+                        <AvatarImage src={'test'} alt={'test'} />
+                        <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                      </Avatar>
+                      <span>{workspace}</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuGroup>
+                  <DropdownMenuGroup>
+                    <DropdownMenuLabel>Account</DropdownMenuLabel>
+                    <DropdownMenuItem>Create or join a workspace...</DropdownMenuItem>
+                    <DropdownMenuItem>Add an account...</DropdownMenuItem>
+                  </DropdownMenuGroup>
+                </DropdownMenuSubContent>
+              </DropdownMenuPortal>
+            </DropdownMenuSub>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={logout}>Log out</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </SidebarMenuItem>
+    </SidebarMenu>
   );
 }
