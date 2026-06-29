@@ -28,7 +28,7 @@ export default async function DashboardLayout({
   return (
     <StaffProvider staffContextProps={{ id: staff.id, email: staff.email }}>
       <SidebarProvider>
-        <AppSidebar variant="inset" user={user} />
+        <AppSidebar variant="inset" />
         <SidebarInset>
           <AppNav user={user} />
           {children}
