@@ -37,6 +37,9 @@ export async function updateSession(request: NextRequest) {
   // with the Supabase client, your users may be randomly logged out.
   const { data } = await supabase.auth.getClaims();
   const user = data?.claims;
+
+  console.log('Got user from proxy');
+
   const isAuthPage = request.nextUrl.pathname.startsWith('/auth');
   if (!user && !isAuthPage) {
     // no user, respond by redirecting the user to the login page
@@ -46,9 +49,9 @@ export async function updateSession(request: NextRequest) {
   }
 
   if (user && isAuthPage) {
-    // user is logged in, redirect to dashboard if they try to access auth pages
+    // user is logged in, redirect to root if they try to access auth pages
     const url = request.nextUrl.clone();
-    url.pathname = '/dashboard';
+    url.pathname = '/';
     return NextResponse.redirect(url);
   }
 

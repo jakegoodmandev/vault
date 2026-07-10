@@ -10,6 +10,8 @@ import { GeistSans } from 'geist/font/sans';
 import type { Metadata } from 'next';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { ThemeProvider } from '@/components/theme-provider';
+import { getWorkspaces } from '@/lib/data/workspace';
+import { redirect } from 'next/navigation';
 
 import './globals.css';
 
@@ -18,11 +20,12 @@ export const metadata: Metadata = {
   description: 'Dashboard for healthcare.',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  console.log('Rendering RootLayout...');
   return (
     <html
       lang="en"
