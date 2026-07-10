@@ -29,7 +29,7 @@ unauthenticatedTest.describe('unauthenticated user', () => {
   unauthenticatedTest(
     'gets redirected to login page when accessing protected route #2',
     async ({ page }) => {
-      await page.goto('/dashboard');
+      await page.goto('/00000000-0000-0000-0000-000000000000');
       await expect(page).toHaveURL('/auth/login');
     }
   );
@@ -37,12 +37,12 @@ unauthenticatedTest.describe('unauthenticated user', () => {
 
 test.describe('authenticated user', () => {
   test('can access dashboard', async ({ page }) => {
-    await page.goto('/dashboard');
-    await expect(page).toHaveURL('/dashboard');
+    await page.goto('/00000000-0000-0000-0000-000000000000');
+    await expect(page).toHaveURL('/00000000-0000-0000-0000-000000000000/home');
   });
 
   test('can sign out', async ({ page }) => {
-    await page.goto('/dashboard');
+    await page.goto('/00000000-0000-0000-0000-000000000000');
 
     page.locator('[data-slot="sidebar-header"]').click();
     page.getByText('Log out').click();

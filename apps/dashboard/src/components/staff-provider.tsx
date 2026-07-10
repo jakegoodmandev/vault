@@ -1,10 +1,10 @@
 'use client';
 
+import { Tables } from '@/lib/database.types';
 import { createContext, useContext } from 'react';
 
-type StaffContextProps = {
-  id: string;
-  email: string;
+type StaffContextProps = Omit<Tables<'staff'>, 'auth_user_id'> & {
+  workspaces: Tables<'workspace'>[];
 };
 
 const StaffContext = createContext<StaffContextProps | null>(null);
