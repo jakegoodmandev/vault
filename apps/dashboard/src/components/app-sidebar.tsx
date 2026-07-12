@@ -2,8 +2,6 @@
 
 import * as React from 'react';
 
-import { NavMain } from '@/components/nav-main';
-import { NavProjects } from '@/components/nav-projects';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,7 +10,6 @@ import {
   DropdownMenuLabel,
   DropdownMenuPortal,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
@@ -21,20 +18,34 @@ import {
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarHeader,
-  SidebarRail,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { ChevronDownIcon } from 'lucide-react';
+import { ClipboardListIcon, LayoutDashboardIcon, ChevronDownIcon } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { useStaff } from '@/components/staff-provider';
 import { useWorkspace } from '@/components/workspace-provider';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import { useParams, usePathname } from 'next/navigation';
+
+const mainNavItems = [
+  {
+    title: 'Overview',
+    href: '/overview',
+    icon: LayoutDashboardIcon,
+  },
+  {
+    title: 'Claims',
+    href: '/claims',
+    icon: ClipboardListIcon,
+  },
+];
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
@@ -43,11 +54,46 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <AppSidebarHeaderMenu />
       </SidebarHeader>
       <SidebarContent>
-        {/* <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} /> */}
+        <AppSidebarMainMenu />
       </SidebarContent>
-      <SidebarRail />
     </Sidebar>
+  );
+}
+
+function AppSidebarMainMenu() {
+  const params = useParams<{ workspace?: string | string[] }>();
+  const pathname = usePathname();
+  const workspace =
+    typeof params.workspace === 'string' ? params.workspace : params.workspace?.[0];
+
+  if (!workspace) {
+    return null;
+  }
+
+  return (
+    <SidebarGroup>
+      <SidebarGroupLabel>Workspace</SidebarGroupLabel>
+      <SidebarGroupContent>
+        <SidebarMenu>
+          {mainNavItems.map((item) => {
+            const href = `/${workspace}${item.href}`;
+            const isActive = pathname === href || pathname.startsWith(`${href}/`);
+            const Icon = item.icon;
+
+            return (
+              <SidebarMenuItem key={item.title}>
+                <SidebarMenuButton asChild tooltip={item.title} isActive={isActive}>
+                  <Link href={href}>
+                    <Icon />
+                    <span>{item.title}</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            );
+          })}
+        </SidebarMenu>
+      </SidebarGroupContent>
+    </SidebarGroup>
   );
 }
 
@@ -58,10 +104,7 @@ export function AppSidebarHeaderMenu() {
     window.location.href = '/auth/login';
   };
 
-  const params = useParams();
-  console.log('Rendering AppSidebarHeaderMenu...', params);
-
-  const { id: staffId, email: staffEmail } = useStaff();
+  const { email: staffEmail } = useStaff();
   const { name: workspaceName } = useWorkspace();
 
   return (
@@ -77,7 +120,7 @@ export function AppSidebarHeaderMenu() {
                 <AvatarImage src={'test'} alt={'test'} />
                 <AvatarFallback className="rounded-lg">CN</AvatarFallback>
               </Avatar>
-              <span className="truncate text-base font-semibold">{workspaceName}</span>
+              <span className="truncate text-sm font-semibold">{workspaceName}</span>
               <ChevronDownIcon className="ml-auto" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
