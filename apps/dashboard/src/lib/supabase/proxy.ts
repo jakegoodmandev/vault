@@ -38,7 +38,7 @@ export async function updateSession(request: NextRequest) {
   const { data } = await supabase.auth.getClaims();
   const user = data?.claims;
 
-  console.log('Got user from proxy');
+  console.log('Got user from proxy', user);
 
   const isAuthPage = request.nextUrl.pathname.startsWith('/auth');
   if (!user && !isAuthPage) {
