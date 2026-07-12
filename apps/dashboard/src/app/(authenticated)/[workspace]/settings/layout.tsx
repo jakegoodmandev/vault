@@ -1,4 +1,3 @@
-import { AppNav } from '@/components/app-nav';
 import { createClient } from '@/lib/supabase/server';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/app-sidebar';

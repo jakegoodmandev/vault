@@ -27,6 +27,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarTrigger,
 } from '@/components/ui/sidebar';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ChevronDownIcon } from 'lucide-react';
@@ -42,11 +43,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarHeader>
         <AppSidebarHeaderMenu />
       </SidebarHeader>
-      <SidebarContent>
-        {/* <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} /> */}
-      </SidebarContent>
-      <SidebarRail />
+      <SidebarContent></SidebarContent>
     </Sidebar>
   );
 }
@@ -57,9 +54,6 @@ export function AppSidebarHeaderMenu() {
     await supabase.auth.signOut();
     window.location.href = '/auth/login';
   };
-
-  const params = useParams();
-  console.log('Rendering AppSidebarHeaderMenu...', params);
 
   const { id: staffId, email: staffEmail } = useStaff();
   const { name: workspaceName } = useWorkspace();
@@ -77,7 +71,7 @@ export function AppSidebarHeaderMenu() {
                 <AvatarImage src={'test'} alt={'test'} />
                 <AvatarFallback className="rounded-lg">CN</AvatarFallback>
               </Avatar>
-              <span className="truncate text-base font-semibold">{workspaceName}</span>
+              <span className="truncate text-sm font-semibold">{workspaceName}</span>
               <ChevronDownIcon className="ml-auto" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
